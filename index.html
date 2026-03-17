@@ -1779,18 +1779,31 @@ async function copyCard() {
   }
 }
 
-function postCardToX() {
+async function postCardToX() {
+  const canvas = document.getElementById('roast-card-canvas');
   const score = currentScore !== null ? currentScore.toFixed(1) : '?';
   const arch = window._lastArchetype || '';
-  const maxLen = 120;
-  const shortVerdict = currentVerdict.length > maxLen ? currentVerdict.slice(0, maxLen - 1) + '…' : currentVerdict;
   const text = [
     `Just got my Web3 deck roasted by @NozomiNetwork.`,
     `${score}/10 — ${arch}`,
-    `"${shortVerdict}"`,
     `roastmydeck.nozomi.network`
   ].join('\n\n');
-  window.open('https://x.com/intent/post?text=' + encodeURIComponent(text), '_blank');
+
+  // Copy card image to clipboard first
+  try {
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+    // Show toast
+    const el = document.getElementById('card-copied');
+    el.textContent = 'Card copied! Paste it into your tweet (Ctrl+V)';
+    el.classList.add('show');
+    setTimeout(() => { el.classList.remove('show'); el.textContent = 'Copied to clipboard'; }, 5000);
+  } catch(e) { /* clipboard may fail — still open X */ }
+
+  // Small delay so they see the toast before tab switches
+  setTimeout(() => {
+    window.open('https://x.com/intent/post?text=' + encodeURIComponent(text), '_blank');
+  }, 600);
 }
 
 // FIX #2: heroVisible reset properly in reset()
