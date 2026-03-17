@@ -1,0 +1,1602 @@
+<!--
+LOCKED COPY — DO NOT REWRITE WITHOUT EXPLICIT SIGN-OFF
+CTA: See CTA_VARIANTS in JS. HUGS: See renderResults in JS. CARDS: See SYSTEM prompt in JS.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roast My Pitch Deck — Nozomi</title>
+<meta name="description" content="Drop your deck. Find out what every investor thinks but won't say. Free. Instant.">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@NozomiNetwork">
+<meta name="twitter:title" content="Roast My Pitch Deck — Nozomi">
+<meta name="twitter:description" content="Drop your Web3 deck. Find out what investors say in the partner meeting. Free. Instant.">
+<meta name="twitter:image" content="https://roastmydeck.nozomi.network/og.png">
+
+<!-- OG -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://roastmydeck.nozomi.network">
+<meta property="og:title" content="Roast My Pitch Deck — Nozomi">
+<meta property="og:description" content="Drop your Web3 deck. Find out what investors say in the partner meeting. Free. Instant.">
+<meta property="og:image" content="https://roastmydeck.nozomi.network/og.png">
+
+<link rel="canonical" href="https://roastmydeck.nozomi.network">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+:root {
+  --black: #0a0a09;
+  --off-white: #f2ede3;
+  --pink: #C2185B;
+  --amber: #f59e0b;
+  --green-score: #10b981;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --display: 'Bebas Neue', Impact, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--off-white);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ===== HEADER ===== */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 14px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10,10,9,0.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(242,237,227,0.05);
+}
+.counter-pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(242,237,228,0.35);
+  border: 1px solid rgba(242,237,228,0.08);
+  border-radius: 100px;
+  padding: 4px 14px;
+}
+.counter-pill span { color: rgba(242,237,228,0.75); font-weight: 500; }
+.logo {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(242,237,227,0.35);
+}
+.logo strong { color: var(--pink); font-weight: 500; }
+
+/* ===== HERO ===== */
+#hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 72px 0 40px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-feed-bottom {
+  margin-top: 40px;
+  width: 100%;
+}
+
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px 56px;
+}
+
+.hero-h1 {
+  font-family: var(--display);
+  font-size: clamp(46px, 6.5vw, 88px);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  margin-bottom: 24px;
+  animation: fadeUp 0.35s ease both;
+}
+.hero-h1 .accent { color: var(--pink); }
+
+.hero-hook {
+  font-family: 'DM Serif Display', Georgia, serif !important;
+  font-style: italic;
+  font-size: clamp(15px, 1.4vw, 19px);
+  color: rgba(242,237,227,0.6);
+  line-height: 1.55;
+  margin: 0 auto 20px;
+  animation: fadeUp 0.35s ease 0.08s both;
+  max-width: 520px;
+  width: 100%;
+  letter-spacing: 0;
+  text-align: center;
+  text-wrap: balance;
+  display: block;
+}
+
+/* ===== UPLOAD ===== */
+#upload-zone {
+  animation: fadeUp 0.35s ease 0.16s both;
+  width: 520px;
+  max-width: calc(100vw - 80px);
+  margin: 0 auto 28px;
+  text-align: center;
+}
+
+.upload-box {
+  border: 1px solid rgba(194,24,91,0.35);
+  border-radius: 3px;
+  padding: 44px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: rgba(194,24,91,0.025);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.upload-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(194,24,91,0.07) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.upload-box:hover::before, .upload-box.drag-over::before { opacity: 1; }
+.upload-box:hover, .upload-box.drag-over {
+  border-color: var(--pink);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(194,24,91,0.1);
+}
+.upload-icon { font-size: 28px; display: block; margin-bottom: 12px; transition: transform 0.18s; }
+.upload-box:hover .upload-icon { transform: translateY(-3px); }
+.upload-headline {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.upload-sub { font-size: 10px; color: rgba(242,237,227,0.25); letter-spacing: 0.12em; text-transform: uppercase; }
+.upload-sub-alt { font-size: 10px; color: rgba(242,237,227,0.18); letter-spacing: 0.06em; margin-top: 10px; cursor: pointer; transition: color 0.2s; }
+.upload-sub-alt:hover { color: rgba(242,237,227,0.45); }
+#file-input { display: none; }
+
+.upload-footnote {
+  font-size: 10px;
+  color: rgba(242,237,228,0.38);
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* PDF loading state inside box */
+.upload-loading {
+  font-size: 11px;
+  color: var(--pink);
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+/* ===== SOCIAL PROOF ===== */
+.hero-social-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  animation: fadeUp 0.35s ease 0.2s both;
+  margin-bottom: 56px;
+}
+.avatar-stack { display: flex; }
+.avatar-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--black);
+  margin-left: -9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0;
+  flex-shrink: 0;
+  color: var(--black);
+  font-weight: 700;
+}
+.avatar-circle:first-child { margin-left: 0; }
+/* ===== SCROLLING FEED ===== */
+.recently-label {
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.65);
+  margin-bottom: 18px;
+  text-align: center;
+  animation: fadeUp 0.35s ease 0.22s both;
+  padding: 0 40px;
+}
+.feed-scroll {
+  width: calc(100% + 80px);
+  margin-left: -40px;
+  overflow: hidden;
+}
+.feed-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .feed-scroll { overflow-x: auto; }
+}
+.feed-card {
+  background: rgba(242,237,227,0.03);
+  border: 1px solid rgba(242,237,227,0.06);
+  border-radius: 3px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  min-width: 240px;
+  max-width: 320px;
+}
+.feed-card-score {
+  font-family: var(--display);
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+}
+.feed-card-score.red { color: var(--pink); }
+.feed-card-score.amber { color: var(--amber); }
+.feed-card-score.green { color: var(--green-score); }
+.feed-card-verdict {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(242,237,228,0.45);
+  line-height: 1.5;
+  text-align: left;
+  letter-spacing: 0.02em;
+}
+
+
+.manual-submit {
+  margin-top: 8px;
+  background: transparent;
+  border: 1px solid rgba(242,237,227,0.2);
+  color: var(--off-white);
+  padding: 10px 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+.manual-submit:hover { border-color: var(--pink); color: var(--pink); }
+
+/* ===== PROCESSING ===== */
+#processing {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 40px;
+}
+.proc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  margin-top: 32px;
+  width: 100%;
+}
+.proc-left { display: flex; flex-direction: column; min-height: 320px; }
+.proc-right { padding-top: 4px; }
+.proc-label {
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.proc-label::after {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--pink);
+  animation: loadbar 1s infinite alternate;
+}
+@keyframes loadbar {
+  from { width: 10px; opacity: 0.4; }
+  to { width: 48px; opacity: 1; }
+}
+.proc-h {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 0.92;
+  margin-bottom: 40px;
+  letter-spacing: 0.02em;
+}
+.proc-h em { color: var(--pink); font-style: normal; }
+.proc-live-score {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 28px;
+  min-height: 52px;
+}
+.proc-score-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(242,237,227,0.25);
+}
+.proc-score-num {
+  font-family: var(--display);
+  font-size: 48px;
+  line-height: 1;
+  color: var(--amber);
+  transition: color 0.4s, transform 0.3s;
+  min-width: 60px;
+}
+.proc-score-num.dropping { color: #ef4444; transform: scale(1.08); }
+.proc-score-denom { font-size: 18px; color: rgba(242,237,227,0.2); }
+.proc-quote-box {
+  max-width: 520px;
+  padding: 16px 20px;
+  border-left: 2px solid rgba(194,24,91,0.4);
+  margin-bottom: 36px;
+  min-height: 68px;
+}
+.proc-quote-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(194,24,91,0.5);
+  display: block;
+  margin-bottom: 6px;
+}
+.proc-quote-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: rgba(242,237,227,0.5);
+  line-height: 1.6;
+  transition: opacity 0.2s;
+}
+.cat-list { width: 100%; }
+.cat-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(242,237,227,0.04);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.cat-item.visible { opacity: 1; transform: translateX(0); }
+.cat-num { font-size: 10px; color: rgba(242,237,227,0.15); width: 18px; flex-shrink: 0; letter-spacing: 0.1em; }
+.cat-item.active .cat-num, .cat-item.done .cat-num { color: var(--pink); }
+.cat-name { font-size: 14px; color: rgba(242,237,227,0.3); flex: 1; transition: color 0.3s; }
+.cat-item.active .cat-name { color: var(--off-white); }
+.cat-item.done .cat-name { color: rgba(242,237,227,0.5); }
+.cat-tick { font-size: 11px; color: rgba(242,237,227,0.1); transition: color 0.3s; }
+.cat-item.done .cat-tick { color: rgba(242,237,227,0.35); }
+
+/* ===== RESULTS ===== */
+#results { display: none; padding: 80px 40px 0; }
+
+.results-nav { padding: 24px 0 0; margin-bottom: 8px; }
+.back-btn {
+  background: transparent; border: none;
+  color: rgba(242,237,227,0.3); font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; padding: 0; transition: color 0.2s;
+}
+.back-btn:hover { color: var(--off-white); }
+
+.score-hero {
+  padding: 60px 0 48px;
+  border-bottom: 1px solid rgba(242,237,227,0.07);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 56px;
+  align-items: start;
+}
+.big-score {
+  font-family: var(--display);
+  font-size: clamp(48px, 5.5vw, 76px);
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+}
+.big-score.red { color: #ef4444; }
+.big-score.amber { color: var(--amber); }
+.big-score.green { color: var(--green-score); }
+.score-denom {
+  font-family: var(--display);
+  font-size: clamp(24px, 3vw, 38px);
+  color: rgba(242,237,227,0.15);
+  line-height: 1; margin-top: 12px;
+}
+.score-right { padding-top: 16px; }
+.score-tag {
+  font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--pink); margin-bottom: 18px; display: block;
+}
+.verdict {
+  font-family: var(--serif);
+  font-size: clamp(16px, 1.7vw, 22px);
+  font-style: italic; line-height: 1.5;
+  max-width: 560px; color: rgba(242,237,227,0.92);
+}
+
+/* ===== CARDS ===== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  border-left: 1px solid rgba(242,237,227,0.07);
+  border-top: 1px solid rgba(242,237,227,0.07);
+}
+.score-card {
+  padding: 24px;
+  border-right: 1px solid rgba(242,237,227,0.07);
+  border-bottom: 1px solid rgba(242,237,227,0.07);
+  cursor: pointer; position: relative; transition: background 0.2s;
+}
+.score-card:hover { background: rgba(242,237,227,0.025); }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.card-score-big { font-family: var(--display); font-size: 44px; line-height: 1; letter-spacing: 0.02em; }
+.card-score-big.red { color: #ef4444; }
+.card-score-big.amber { color: var(--amber); }
+.card-score-big.green { color: var(--green-score); }
+.card-num-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: rgba(242,237,227,0.25); text-align: right; line-height: 1.4; }
+.card-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 18px; color: rgba(242,237,227,0.35); }
+.card-sting { font-family: var(--serif); font-style: italic; font-size: 13px; color: rgba(242,237,227,0.8); line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.score-card.expanded .card-sting { display: block; overflow: visible; -webkit-line-clamp: unset; }
+.card-full { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(242,237,227,0.08); font-size: 12px; color: rgba(242,237,227,0.6); line-height: 1.85; }
+.card-expand-hint { margin-top: 14px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(242,237,227,0.2); transition: color 0.2s; }
+.score-card:hover .card-expand-hint { color: var(--pink); }
+.score-card.expanded .card-expand-hint { color: rgba(242,237,227,0.15); }
+.score-card.expanded .card-full { display: block; }
+
+/* ===== SUMMARY ===== */
+.summary-block { padding: 60px 0 56px; border-bottom: 1px solid rgba(242,237,227,0.07); max-width: 760px; }
+.summary-label { font-family: var(--display); font-size: clamp(18px,1.8vw,24px); letter-spacing: 0.05em; color: var(--pink); text-transform: uppercase; margin-bottom: 20px; line-height: 1.2; }
+.summary-text { font-family: var(--serif); font-size: 14px; font-style: italic; line-height: 1.75; color: rgba(242,237,227,0.65); max-width: 580px; }
+
+/* ===== HUGS ===== */
+.hugs-block { padding: 56px 0; border-bottom: 1px solid rgba(242,237,227,0.07); text-align: center; }
+.hugs-text { font-family: var(--serif); font-size: clamp(15px,1.5vw,19px); font-style: italic; color: rgba(242,237,227,0.55); max-width: 620px; margin: 0 auto; line-height: 1.6; }
+
+/* ===== SHARE ===== */
+.share-block { padding: 44px 0; border-bottom: 1px solid rgba(242,237,227,0.07); display: flex; flex-direction: column; gap: 20px; }
+.share-text { font-size: 14px; color: rgba(242,237,227,0.4); line-height: 1.7; }
+.share-text strong { color: rgba(242,237,227,0.75); }
+.share-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.share-x-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(242,237,227,0.06); border: 1px solid rgba(242,237,227,0.15);
+  color: var(--off-white); padding: 13px 28px; border-radius: 3px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.share-x-btn:hover { background: var(--pink); border-color: var(--pink); transform: translateY(-1px); }
+.download-report-btn { background: rgba(242,237,227,0.04) !important; }
+.download-report-btn:hover { background: rgba(242,237,227,0.1) !important; border-color: var(--off-white) !important; }
+
+/* ===== CTA ===== */
+.cta-section { display: none; padding: 88px 40px; background: rgba(194,24,91,0.03); border-top: 1px solid rgba(194,24,91,0.15); }
+.cta-inner { max-width: 620px; }
+.cta-pivot { font-family: var(--serif); font-size: clamp(17px,1.8vw,21px); font-style: italic; color: rgba(242,237,227,0.4); margin-bottom: 32px; line-height: 1.55; }
+.cta-h { font-family: var(--display); font-size: clamp(32px,4.5vw,60px); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 20px; }
+.cta-body { font-size: 14px; color: rgba(242,237,227,0.5); line-height: 1.85; max-width: 500px; margin-bottom: 36px; }
+.cta-btn { display: inline-block; background: var(--pink); color: white; text-decoration: none; padding: 18px 44px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 3px; transition: all 0.2s; font-weight: 500; }
+.cta-btn:hover { background: #d81b60; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(194,24,91,0.3); }
+
+/* ===== ERROR ===== */
+#error-inner { display: none; min-height: 100vh; flex-direction: column; justify-content: center; padding: 130px 40px; }
+.error-tag { font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--pink); margin-bottom: 20px; }
+.error-h { font-family: var(--display); font-size: clamp(28px, 4vw, 52px); line-height: 0.92; margin-bottom: 24px; }
+.error-body { font-size: 14px; color: rgba(242,237,227,0.5); line-height: 1.8; max-width: 480px; margin-bottom: 40px; }
+.retry-btn { background: transparent; border: 1px solid rgba(242,237,227,0.2); color: var(--off-white); padding: 14px 32px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 3px; transition: all 0.2s; width: fit-content; }
+.retry-btn:hover { border-color: var(--pink); color: var(--pink); }
+
+.social-proof-text {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: rgba(242,237,227,0.35);
+  letter-spacing: 0.06em;
+}
+.social-proof-text span { color: rgba(242,237,227,0.7); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== EMAIL MODAL ===== */
+#email-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(10,10,9,0.88);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#email-modal.open { display: flex; }
+.email-modal-box {
+  background: #111110;
+  border: 1px solid rgba(194,24,91,0.3);
+  border-radius: 6px;
+  padding: 48px 44px;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  animation: fadeUp 0.3s ease both;
+}
+.email-modal-close {
+  position: absolute; top: 16px; right: 20px;
+  background: none; border: none;
+  color: rgba(242,237,227,0.2); font-size: 18px;
+  cursor: pointer; font-family: var(--mono); transition: color 0.2s;
+}
+.email-modal-close:hover { color: rgba(242,237,227,0.6); }
+.email-modal-tag {
+  font-size: 10px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--pink);
+  display: block; margin-bottom: 16px;
+}
+.email-modal-h {
+  font-family: var(--display); font-size: 36px;
+  line-height: 1; letter-spacing: 0.03em; margin-bottom: 14px;
+}
+.email-modal-sub {
+  font-size: 13px; color: rgba(242,237,227,0.45);
+  line-height: 1.7; margin-bottom: 28px;
+}
+.email-modal-row { display: flex; gap: 10px; flex-wrap: wrap; }
+#email-input-modal {
+  flex: 1; min-width: 180px;
+  background: rgba(242,237,227,0.05);
+  border: 1px solid rgba(242,237,227,0.15);
+  border-radius: 3px; padding: 12px 16px;
+  color: var(--off-white); font-family: var(--mono);
+  font-size: 13px; outline: none; transition: border-color 0.2s;
+}
+#email-input-modal:focus { border-color: rgba(194,24,91,0.5); }
+#email-input-modal::placeholder { color: rgba(242,237,227,0.2); }
+.email-modal-btn {
+  background: var(--pink); color: white; border: none;
+  border-radius: 3px; padding: 12px 22px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; white-space: nowrap; transition: background 0.2s;
+}
+.email-modal-btn:hover { background: #a8103a; }
+.email-modal-skip {
+  display: block; margin-top: 16px;
+  font-size: 11px; color: rgba(242,237,227,0.2);
+  cursor: pointer; text-align: center; letter-spacing: 0.05em;
+  text-decoration: underline; text-underline-offset: 3px;
+  background: none; border: none; font-family: var(--mono);
+  width: 100%; transition: color 0.2s;
+}
+.email-modal-skip:hover { color: rgba(242,237,227,0.45); }
+.email-modal-success { display: none; text-align: center; padding: 20px 0; }
+.email-modal-success-h {
+  font-family: var(--display); font-size: 28px;
+  letter-spacing: 0.04em; margin-bottom: 10px;
+}
+.email-modal-success-sub { font-size: 12px; color: rgba(242,237,227,0.4); line-height: 1.6; }
+
+/* ===== PRINT ===== */
+@media print {
+  body { background: white !important; color: #111 !important; }
+  #hero, #processing, header, .cta-section, .share-block, .results-nav, .back-btn, .card-expand-hint { display: none !important; }
+  #results { display: block !important; padding: 40px !important; }
+  .score-hero { border-color: #ddd !important; }
+  .verdict { color: #333 !important; }
+  .score-card { break-inside: avoid; border: 1px solid #ddd !important; background: white !important; }
+  .card-score-big, .big-score { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card-sting, .card-full { color: #444 !important; }
+  .card-full { display: block !important; }
+  .summary-label, .summary-text { color: #333 !important; }
+  .hugs-text { color: #555 !important; }
+  @page { margin: 20mm; }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 640px) {
+  header { padding: 12px 20px; }
+  #hero, #processing, #results { padding-left: 20px; padding-right: 20px; }
+  .cta-section { padding: 64px 20px; }
+  .score-hero { grid-template-columns: 1fr; gap: 20px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .share-actions { flex-direction: column; }
+  .share-x-btn { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo"><strong>Nozomi</strong> Network</div>
+  <div class="counter-pill"><span id="deck-count-header">2,847</span> projects roasted</div>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+
+    <div style="text-align:center;width:100%;">
+      <h1 class="hero-h1">ROAST MY<br><span class="accent">PITCH DECK</span></h1>
+    </div>
+
+    <div id="upload-zone" style="text-align:center;">
+      <p class="hero-hook">Drop your deck. We'll tell you why you have 30 investor meetings but 0 term sheets.</p>
+      <div class="upload-box" id="drop-zone">
+        <input type="file" id="file-input" accept=".pdf">
+        <span class="upload-icon">↑</span>
+        <div class="upload-headline" id="upload-headline">DROP YOUR DECK</div>
+        <div class="upload-sub">30 seconds · free</div>
+      </div>
+      <div class="upload-loading" id="upload-loading"></div>
+      <div class="upload-footnote" style="text-align:center;">DocSend? Open → three dots → Download → Export as PDF</div>
+      <div class="upload-footnote" style="margin-top:6px;text-align:center;"><span class="upload-sub-alt" onclick="toggleManualPaste()">No PDF? Paste text instead →</span></div>
+      <div id="manual-paste-zone" style="display:none;margin-top:12px;">
+        <textarea id="manual-text" placeholder="Paste your slide content here — copy from Notion, Google Docs, or anywhere. The more text, the sharper the roast." style="width:100%;min-height:120px;background:rgba(242,237,227,0.04);border:1px solid rgba(242,237,227,0.12);border-radius:3px;color:var(--off-white);font-family:var(--mono);font-size:12px;padding:14px;resize:vertical;outline:none;line-height:1.6;"></textarea>
+        <button class="manual-submit" onclick="runManualAnalysis()">Roast this text →</button>
+      </div>
+    </div>
+
+    <div class="hero-social-proof">
+      <div class="avatar-stack" id="avatar-stack"></div>
+      <span class="social-proof-text"><span id="social-proof-count">2,852</span> projects roasted</span>
+    </div>
+
+  </div><!-- end hero-inner -->
+
+  <div class="hero-feed-bottom">
+    <div class="recently-label">Recently roasted</div>
+    <div class="feed-scroll">
+      <div class="feed-track" id="feed-track"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- PROCESSING -->
+<section id="processing">
+  <div class="proc-label"><span id="proc-label-text">Reading your deck</span></div>
+  <h2 class="proc-h">FINDING WHAT<br>INVESTORS <em>WON'T SAY.</em></h2>
+  <div class="proc-grid">
+    <div class="proc-left">
+      <div class="proc-live-score">
+        <span class="proc-score-label">Running score</span>
+        <span class="proc-score-num" id="proc-score-num">—</span>
+        <span class="proc-score-denom">/10</span>
+      </div>
+      <div class="proc-quote-box">
+        <span class="proc-quote-label" id="proc-quote-label">From your deck</span>
+        <div class="proc-quote-text" id="proc-quote-text">Reading...</div>
+      </div>
+    </div>
+    <div class="proc-right">
+  <div class="cat-list" id="cat-list">
+    <div class="cat-item" data-i="1"><span class="cat-num">01</span><span class="cat-name">Hook — Value Prop, Problem, Why Now</span><span class="cat-tick">·</span></div>
+    <div class="cat-item" data-i="2"><span class="cat-num">02</span><span class="cat-name">Solution &amp; Differentiation</span><span class="cat-tick">·</span></div>
+    <div class="cat-item" data-i="3"><span class="cat-num">03</span><span class="cat-name">Market Size</span><span class="cat-tick">·</span></div>
+    <div class="cat-item" data-i="4"><span class="cat-num">04</span><span class="cat-name">Traction</span><span class="cat-tick">·</span></div>
+    <div class="cat-item" data-i="5"><span class="cat-num">05</span><span class="cat-name">Tokenomics</span><span class="cat-tick">·</span></div>
+    <div class="cat-item" data-i="6"><span class="cat-num">06</span><span class="cat-name">GTM Strategy</span><span class="cat-tick">·</span></div>
+    <div class="cat-item" data-i="7"><span class="cat-num">07</span><span class="cat-name">Team</span><span class="cat-tick">·</span></div>
+    <div class="cat-item" data-i="8"><span class="cat-num">08</span><span class="cat-name">The Ask</span><span class="cat-tick">·</span></div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="results-nav">
+    <button class="back-btn" onclick="reset()">Upload a different deck →</button>
+  </div>
+  <div class="score-hero" id="score-hero-block">
+    <div>
+      <div class="big-score" id="big-score-num">·</div>
+      <div class="score-denom">/10</div>
+    </div>
+    <div class="score-right">
+
+      <div class="verdict" id="verdict-text">·</div>
+    </div>
+  </div>
+  <div class="cards-grid" id="cards-grid"></div>
+  <div class="share-block">
+    <div class="share-text"><strong>Your co-founder needs to see this.</strong> So does anyone who told you the deck was fine.</div>
+    <div class="share-actions">
+      <button class="share-x-btn" onclick="postToX()"><span style="font-weight:700">𝕏</span> Post to X</button>
+      <button class="share-x-btn download-report-btn" onclick="downloadFullReport()">↓ Full Report</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="cta-block">
+  <div class="cta-inner">
+    <div class="cta-pivot" id="cta-pivot">·</div>
+    <h2 class="cta-h" id="cta-h">·</h2>
+    <p class="cta-body" id="cta-body">·</p>
+    <a href="https://forms.fillout.com/t/kdCiuV5y3Dus" class="cta-btn" target="_blank">Fix the deck with Nozomi →</a>
+  </div>
+</div>
+
+<!-- ERROR -->
+<div id="error-inner">
+  <div class="error-tag">Analysis failed</div>
+  <h2 class="error-h">SOMETHING<br>BROKE.</h2>
+  <p class="error-body" id="error-body">PDF extraction failed or the API timed out. Re-export your deck as a PDF and try again. If it keeps failing, email <strong>hello@nozomi.network</strong> and we will review it manually within 24 hours.</p>
+  <button class="retry-btn" onclick="reset()">Try again →</button>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ===== STATE =====
+let currentScore = null;
+let currentVerdict = '';
+let _procStepTimers = []; // FIX #15: track all step timers so we can cancel them
+
+// ===== API KEY =====
+
+// ===== COUNTER =====
+(function() {
+  const BASE = 2847;
+  const sessionKey = 'nozomi_session_counted';
+  const storedKey = 'nozomi_count_offset';
+  let offset = parseInt(localStorage.getItem(storedKey) || '0');
+  if (!sessionStorage.getItem(sessionKey)) {
+    offset += 1;
+    localStorage.setItem(storedKey, offset);
+    sessionStorage.setItem(sessionKey, '1');
+  }
+  const n = (BASE + offset).toLocaleString();
+  const el = document.getElementById('deck-count-header');
+  if (el) el.textContent = n;
+  const sp = document.getElementById('social-proof-count');
+  if (sp) sp.textContent = n;
+})();
+
+// ===== AVATARS — DOM-built SVG project logos, parser-safe =====
+(function() {
+  const stack = document.getElementById('avatar-stack');
+  if (!stack) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  function mksvg(bg, fn) {
+    const s = document.createElementNS(NS,'svg');
+    s.setAttribute('viewBox','0 0 40 40');
+    s.setAttribute('width','34'); s.setAttribute('height','34');
+    const b = document.createElementNS(NS,'circle');
+    b.setAttribute('cx',20); b.setAttribute('cy',20);
+    b.setAttribute('r',20); b.setAttribute('fill',bg);
+    s.appendChild(b); fn(s);
+    const d = document.createElement('div');
+    d.className = 'avatar-circle';
+    d.style.cssText = 'overflow:hidden;border-radius:50%;display:flex;flex-shrink:0;';
+    d.appendChild(s); return d;
+  }
+  function cc(cx,cy,r,fill,op) {
+    const e = document.createElementNS(NS,'circle');
+    e.setAttribute('cx',cx); e.setAttribute('cy',cy);
+    e.setAttribute('r',r); e.setAttribute('fill',fill);
+    if(op) e.setAttribute('opacity',op); return e;
+  }
+  function pp(d,fill,str,sw,op,lc) {
+    const e = document.createElementNS(NS,'path'); e.setAttribute('d',d);
+    e.setAttribute('fill',fill||'none');
+    if(str){e.setAttribute('stroke',str);e.setAttribute('stroke-width',sw||2);}
+    if(op) e.setAttribute('opacity',op);
+    if(lc) e.setAttribute('stroke-linecap','round'); return e;
+  }
+  function tt(x,y,s,fill,sz) {
+    const e = document.createElementNS(NS,'text');
+    e.setAttribute('x',x); e.setAttribute('y',y);
+    e.setAttribute('font-family','Arial Black,sans-serif');
+    e.setAttribute('font-weight','900'); e.setAttribute('font-size',sz||18);
+    e.setAttribute('fill',fill); e.textContent = s; return e;
+  }
+  function pg(pts,str,sw,op) {
+    const e = document.createElementNS(NS,'polygon'); e.setAttribute('points',pts);
+    e.setAttribute('fill','none');
+    if(str){e.setAttribute('stroke',str);e.setAttribute('stroke-width',sw||2);}
+    if(op) e.setAttribute('opacity',op); return e;
+  }
+  const logos = [
+    mksvg('#FF007A', s => { s.appendChild(pp('M16 14c0-1.1.9-2 2-2s2 .9 2 2v5l4 3-4 3v5c0 1.1-.9 2-2 2s-2-.9-2-2V14z','white',null,null,'0.9')); s.appendChild(cc(26,20,2.5,'white','0.7')); }),
+    mksvg('#B6509E', s => { s.appendChild(pp('M20 10c-5 0-8 4-8 9v9l3-3 2 3 2-3 2 3 2-3 3 3v-9c0-5-3-9-6-9z','white',null,null,'0.9')); }),
+    mksvg('#375BD2', s => { s.appendChild(pg('20,8 29,13 29,27 20,32 11,27 11,13','white','2.5','0.9')); s.appendChild(cc(20,20,3,'white')); }),
+    mksvg('#2D374B', s => { s.appendChild(pp('M20 10L28 28h-4l-1.5-4h-5L16 28h-4L20 10z','#28A0F0',null,null,'0.95')); s.appendChild(pp('M17.5 21.5h5L20 15z','#2D374B')); }),
+    mksvg('#FF0420', s => { const r=document.createElementNS(NS,'circle'); r.setAttribute('cx',20);r.setAttribute('cy',20);r.setAttribute('r',8);r.setAttribute('fill','none');r.setAttribute('stroke','white');r.setAttribute('stroke-width','3');r.setAttribute('opacity','0.9'); s.appendChild(r); s.appendChild(cc(20,20,3,'white')); }),
+    mksvg('#8247E5', s => { s.appendChild(pp('M25 16.5l-5-3-5 3v6l5 3 5-3z','none','white','2','0.9')); s.appendChild(pp('M15 19.5l5 3 5-3','none','white','2','0.7')); }),
+    mksvg('#1a1a2e', s => { s.appendChild(tt(11,26,'E','#00D4AA',20)); }),
+    mksvg('#0C0C4F', s => { s.appendChild(pp('M20 11l2.3 7h7.4l-6 4.3 2.3 7L20 25l-6 4.3 2.3-7-6-4.3h7.4z','#EC796B',null,null,'0.95')); }),
+    mksvg('#1B5EE3', s => { s.appendChild(pp('M13 14h14l-14 12h14','none','white','2.5','0.95',true)); }),
+    mksvg('#FFDBB0', s => { s.appendChild(tt(11,27,'S','#EE6C30',20)); }),
+    mksvg('#7B2FBE', s => { s.appendChild(cc(20,20,6,'white','0.85')); s.appendChild(cc(20,20,3,'#7B2FBE')); }),
+    mksvg('#0D1117', s => { ['M14 13v14','M26 13v14','M14 20h12'].forEach(d=>s.appendChild(pp(d,'none','#00D4AA','2.5',null,true))); }),
+    mksvg('#B45309', s => { s.appendChild(tt(11,27,'B','#FCD34D',18)); }),
+    mksvg('#200052', s => { s.appendChild(pp('M12 27V14l8 8 8-8v13','none','#836EF9','2.5',null,true)); }),
+    mksvg('#0E0E10', s => { ['M14 14h12','M14 20h8','M14 26h10'].forEach(d=>s.appendChild(pp(d,'none','#00F58C','2.5',null,true))); }),
+    mksvg('#E91B84', s => { ['M12 14h16','M20 14v14'].forEach(d=>s.appendChild(pp(d,'none','white','2.5',null,true))); }),
+    mksvg('#121212', s => { s.appendChild(pp('M13 27L27 13','none','white','2',null,true)); s.appendChild(pp('M13 13h14v14','none','white','2','0.9',true)); }),
+    mksvg('#0E2240', s => { s.appendChild(pp('M10 24c3-8 7-10 10-8 3-2 7 0 10 8','none','#00B4D8','2.5',null,true)); s.appendChild(cc(20,18,3,'#00B4D8','0.7')); }),
+    mksvg('#1A1A1A', s => { s.appendChild(pp('M14 20l6-8 6 8-6 8-6-8z','#FCFC03',null,null,'0.9')); }),
+    mksvg('#2B5DF0', s => { s.appendChild(pp('M13 15h14l-14 10h14','none','white','2.5',null,true)); }),
+  ];
+  logos.forEach(l => stack.appendChild(l));
+})();
+
+// ===== UPLOAD =====
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const uploadHeadline = document.getElementById('upload-headline');
+const uploadLoading = document.getElementById('upload-loading');
+
+dropZone.addEventListener('click', () => {
+  fileInput.value = '';
+  fileInput.click();
+});
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f?.type === 'application/pdf') handleFile(f);
+  else { uploadLoading.textContent = 'PDF files only.'; uploadLoading.style.color = 'var(--pink)'; }
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+async function handleFile(file) {
+  uploadHeadline.textContent = file.name.length > 30 ? file.name.slice(0, 28) + '…' : file.name;
+  uploadLoading.style.color = 'rgba(242,237,227,0.4)';
+  uploadLoading.textContent = 'Reading PDF…';
+
+  try {
+    const buf = await file.arrayBuffer();
+    uploadLoading.textContent = 'Extracting text…';
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+
+    // ── TEXT EXTRACTION ──
+    let pages = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const pageText = content.items.map(x => x.str).join(' ').trim();
+      if (pageText.length > 10) pages.push({ slide: i, text: pageText });
+    }
+    const fullText = pages.map(p => `[SLIDE ${p.slide}]\n${p.text}`).join('\n\n');
+    const avgWordsPerPage = fullText.trim().split(/\s+/).length / Math.max(pdf.numPages, 1);
+
+    if (avgWordsPerPage >= 8) {
+      // Text mode — fast path
+      uploadLoading.textContent = '';
+      showProcessing(fullText);
+      await runAnalysis(fullText.slice(0, 30000), pdf.numPages, null);
+      return;
+    }
+
+    // ── IMAGE MODE — deck is image-heavy ──
+    uploadLoading.textContent = 'Rendering slides…';
+    const maxSlides = Math.min(pdf.numPages, 15);
+    const images = [];
+
+    for (let i = 1; i <= maxSlides; i++) {
+      uploadLoading.textContent = `Rendering slide ${i} of ${maxSlides}…`;
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 0.5 });
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      const b64 = canvas.toDataURL('image/jpeg', 0.25).split(',')[1];
+      images.push(b64);
+    }
+
+    uploadLoading.textContent = '';
+    showProcessing(''); // no deck quotes in image mode
+    await runAnalysis(null, pdf.numPages, images);
+
+  } catch(e) {
+    showError('Could not read the PDF. Try re-exporting from your presentation tool.');
+    uploadLoading.textContent = '';
+    uploadHeadline.textContent = 'DROP YOUR DECK';
+  }
+}
+
+// ===== COMMENTARY POOL =====
+const ROAST_COMMENTARY = [
+  "Looking for the thing that made you think this was ready...",
+  "Checking if the competitors section names anyone real...",
+  "Counting the market size sources. So far: zero.",
+  "Looking for a Day 1 channel. Still looking.",
+  "Checking if the token actually does anything...",
+  "Trying to find the compounding loop. There is no compounding loop.",
+  "Verifying team credentials actually exist on this slide...",
+  "This last one. The ask. This is where rounds die.",
+  "Scanning for evidence of product-market fit. Interesting.",
+  "Looking for traction that is not a Discord server...",
+  "Checking if the Why Now slide has data or just vibes...",
+  "Reading the GTM strategy. Community. KOLs. Partnerships. That is not a strategy.",
+  "Finding the valuation. Wondering how it was calculated.",
+  "Checking if competitors are named or just waved away...",
+  "Looking for the one slide that would make an investor forward this. Still looking.",
+];
+
+let deckQuotes = [];
+
+function extractQuotes(text) {
+  const sentences = text
+    .replace(/\[SLIDE \d+\]/g, '')
+    .split(/[.!?\n]/)
+    .map(s => s.trim())
+    .filter(s => s.length > 14 && s.length < 75 && /[a-zA-Z]{4}/.test(s) && !/^\d+$/.test(s))
+    .slice(0, 60);
+  return sentences.sort(() => Math.random() - 0.5).slice(0, 8);
+}
+
+// FIX #3: showProcessing only does animation, called once with real text
+function showProcessing(deckText) {
+  hide('hero'); hide('results'); hideCTA(); hideError();
+  document.getElementById('processing').style.display = 'flex';
+
+  deckQuotes = extractQuotes(deckText);
+
+  const items = document.querySelectorAll('.cat-item');
+  const scoreEl = document.getElementById('proc-score-num');
+  const quoteEl = document.getElementById('proc-quote-text');
+  const quoteLabelEl = document.getElementById('proc-quote-label');
+  const labelEl = document.getElementById('proc-label-text');
+
+  // FIX #15: cancel any orphaned timers from previous run
+  _procStepTimers.forEach(t => clearTimeout(t));
+  _procStepTimers = [];
+
+  items.forEach(item => {
+    item.classList.remove('visible', 'active', 'done');
+    item.querySelector('.cat-tick').textContent = '·';
+  });
+
+  let fakeScore = 8.0;
+  scoreEl.textContent = fakeScore.toFixed(1);
+  scoreEl.className = 'proc-score-num';
+
+  const STEP_MS = 2000;
+
+  items.forEach((item, i) => {
+    const t = setTimeout(() => {
+      item.classList.add('visible', 'active');
+      item.querySelector('.cat-tick').textContent = '...';
+
+      if (i > 0) {
+        const p = items[i - 1];
+        p.classList.remove('active');
+        p.classList.add('done');
+        p.querySelector('.cat-tick').textContent = '✓';
+      }
+
+      const useQuote = (i % 2 === 0) && deckQuotes[Math.floor(i / 2)];
+      quoteEl.style.opacity = '0';
+      const qt = setTimeout(() => {
+        if (useQuote) {
+          quoteLabelEl.textContent = 'From your deck';
+          quoteEl.textContent = '"' + deckQuotes[Math.floor(i / 2)] + '"';
+        } else {
+          quoteLabelEl.textContent = 'Nozomi';
+          quoteEl.textContent = ROAST_COMMENTARY[i % ROAST_COMMENTARY.length];
+        }
+        quoteEl.style.opacity = '1';
+      }, 200);
+      _procStepTimers.push(qt);
+
+      if (i >= 2) {
+        fakeScore = Math.max(1.8, fakeScore - (Math.random() * 0.7 + 0.15));
+        scoreEl.textContent = fakeScore.toFixed(1);
+        scoreEl.classList.add('dropping');
+        const dt = setTimeout(() => scoreEl.classList.remove('dropping'), 500);
+        _procStepTimers.push(dt);
+      }
+    }, i * STEP_MS);
+    _procStepTimers.push(t);
+  });
+
+  const lastT = setTimeout(() => {
+    const last = items[items.length - 1];
+    last.classList.remove('active');
+    last.classList.add('done');
+    last.querySelector('.cat-tick').textContent = '✓';
+    if (labelEl) labelEl.textContent = 'Writing the verdict ';
+  }, items.length * STEP_MS);
+  _procStepTimers.push(lastT);
+
+  // Cycle quotes while API finishes
+  let loopIdx = 0;
+  const allContent = [...ROAST_COMMENTARY, ...deckQuotes.map(q => ({ q }))];
+  const loopStart = (items.length * STEP_MS) + 600;
+  window._procLoopTimer = null;
+
+  function cycleContent() {
+    const procEl = document.getElementById('processing');
+    if (!procEl || procEl.style.display === 'none') return;
+    const item = allContent[loopIdx % allContent.length];
+    quoteEl.style.opacity = '0';
+    const ct = setTimeout(() => {
+      if (item && item.q) {
+        quoteLabelEl.textContent = 'From your deck';
+        quoteEl.textContent = '"' + item.q + '"';
+      } else {
+        quoteLabelEl.textContent = 'Nozomi';
+        quoteEl.textContent = typeof item === 'string' ? item : '';
+      }
+      quoteEl.style.opacity = '1';
+    }, 200);
+    _procStepTimers.push(ct);
+    loopIdx++;
+    window._procLoopTimer = setTimeout(cycleContent, 2200);
+  }
+
+  const loopT = setTimeout(() => { cycleContent(); }, loopStart);
+  _procStepTimers.push(loopT);
+}
+
+// ===== ANALYSIS =====
+async function runAnalysis(deckText, totalPages, images) {
+  const SYSTEM = `You are the Nozomi pitch deck roaster. You read Web3 founder decks and say the thing that ends the conversation at the partner meeting — the thing no investor will say to a founder's face.
+
+The deck text is labelled [SLIDE N]. Always reference specific slide numbers. Always quote the exact phrase from the slide.
+
+Return ONLY a raw JSON object. No markdown. No code fences. No preamble.
+
+SCORING:
+8-10 = Investor-ready. Specific, credible, no obvious gaps.
+5-7 = The idea is there. The proof is not.
+1-4 = Missing or broken. An investor closes the tab here.
+
+VOICE:
+You have read ten thousand decks. You stopped being diplomatic in 2022. You want founders to succeed which is exactly why you stopped lying to them. You do not soften. You do not hedge. Every sentence should feel like something a founder reads at 11pm, screenshots, and sends to their co-founder with no other message.
+
+The contempt is never at the founder. It is at the evasion — the gap between what the slide claims and what the founder already knows is true. You are not cruel. You are accurate. Those are different things. Accuracy without mercy is the most useful thing anyone will say to this founder this year.
+
+THREE MOVES FOR EVERY OBSERVATION:
+1. Quote the slide and the exact phrase.
+2. Name what that phrase reveals about what the founder believed when they wrote it — the delusion, the evasion, the thing they were hoping nobody would check.
+3. Name the consequence, or point the last sentence back at the deck. "Those are not the same thing. One of them is traction. The other one is this slide."
+
+The last sentence should land on something the founder already knows but has been avoiding saying out loud.
+
+Write in short declarative sentences. No em dashes. No "however", "although", "moreover", "furthermore", "additionally". No "x but y" constructions. Two to four words per thought is better than ten.
+
+FEEDBACK STRUCTURE — follow this for every category without exception:
+
+THE STING (goes in "sting" field — always visible on the card):
+Two sentences maximum. Sentence one: name the slide, quote the exact phrase. Sentence two: say what that phrase reveals about what the founder believes — and end on the specific thing an investor concludes in the next five seconds. Not what is missing. What it proves about the founder's understanding of their own business.
+
+The last four words of the sting should land like a door closing.
+
+GOOD STING: "Slide 10 lists '75K Members, 38K Members, 150K Followers' under Traction. These are Discord and Twitter counts and the founder put them here because they are the largest numbers in the business, which is the problem."
+
+BETTER STING: "Slide 6 says '$16M seed raised' under Traction. The founder raised money and wrote it down as proof the product works, and those are not the same number."
+
+BEST STING: "The traction slide is a Discord server with 12,000 members and a waitlist. The founder has confused people who said yes to a free thing with people who will pay for a real one."
+
+BAD STING: "The traction section lacks hard metrics and would benefit from real user data." Never write this.
+
+THE EVIDENCE (goes in "feedback" field — shown on expand):
+Two to three sentences. Quote the deck by slide number. Say what is on the page versus what an investor needs to model a return. End with the exact words a partner says when they close the deck. It should feel like overhearing something you were not supposed to hear.
+
+BANNED PHRASES: "consider improving" / "would benefit from" / "it would be helpful" / "could be stronger" / "lacks clarity" / "more detail would" / "it is recommended" / "it is worth noting" / "however" / "although"
+
+THE VERDICT: One sentence. The thing a VC texts their partner after closing the tab. Specific. Savage. Accurate. Names a contradiction or a substitution the founder made and hoped nobody would notice.
+
+THE SUMMARY: Two to three sentences. The single structural substitution that kills this round. Not a list of problems — one root cause anchored to specific slide numbers. Write it like something a founder screenshots and sends with no caption.
+
+CATEGORIES:
+1. Hook (Value Prop, Problem, Why Now): Score 1-4 if problem is asserted without data. Score 5-7 if clear but Why Now is weak. Score 8-10 only if all three create momentum.
+2. Solution and Differentiation: Name competitors they did not mention. Score 1-4 if competitors are unnamed or dismissed. Score 8-10 only if deck answers why a named competitor won't just build this.
+3. Market Size: Catch population-as-market mistake. TAM without SAM and SOM is decoration. Score 1-4 for a population passed off as a market.
+4. Traction: Name every vanity metric by name and translate it. Discord members are not traction. Score 1-3 for vanity metrics only.
+5. Tokenomics: If absent say exactly "There is no tokenomics slide in this deck" then explain what that means for an investor trying to model their return. Score 1 for absent.
+6. GTM Strategy: Name the Day 1 channel if it exists. "Community, KOLs, and partnerships" is not a strategy. Score 2 for a category list with no Day 1 specifics.
+7. Team: Catch title inflation. "Extensive experience in blockchain and AI" scores a 1. Name what is present and what is missing.
+8. The Ask: Name every missing element. FDV. Instrument. Use of funds. Milestone. Timeline. Five missing elements, five points off.
+
+Return exactly this JSON:
+{"categories":[{"id":1,"name":"Hook","sting":"","feedback":"","score":0},{"id":2,"name":"Solution & Differentiation","sting":"","feedback":"","score":0},{"id":3,"name":"Market Size","sting":"","feedback":"","score":0},{"id":4,"name":"Traction","sting":"","feedback":"","score":0},{"id":5,"name":"Tokenomics","sting":"","feedback":"","score":0},{"id":6,"name":"GTM Strategy","sting":"","feedback":"","score":0},{"id":7,"name":"Team","sting":"","feedback":"","score":0},{"id":8,"name":"The Ask","sting":"","feedback":"","score":0}],"overall_score":0,"verdict":"","summary":""}`;
+
+  // Build user message — text mode or vision mode
+  let userContent;
+  if (images && images.length > 0) {
+    userContent = [
+      ...images.map((b64, i) => ({
+        type: 'image',
+        source: { type: 'base64', media_type: 'image/jpeg', data: b64 }
+      })),
+      { type: 'text', text: `This deck has ${totalPages} slides. I've sent you ${images.length} slide images above. Treat each image as one slide in order. Apply the full roast framework.` }
+    ];
+  } else {
+    userContent = `This deck has ${totalPages} slides. Here is the extracted text:\n\n${deckText}`;
+  }
+
+  try {
+    const res = await fetch('/api/roast', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: SYSTEM,
+        messages: [{ role: 'user', content: userContent }]
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const errType = err?.error?.type || '';
+      const errMsg = err?.error?.message || '';
+      let humanMsg = '';
+      if (errType === 'overloaded_error' || res.status === 529) humanMsg = 'Claude is overloaded right now. Wait 30 seconds and try again.';
+      else if (errType.includes('rate_limit') || errMsg.includes('rate')) humanMsg = 'Too many requests right now. Wait a few minutes and try again.';
+      else if (res.status === 401 || errType === 'authentication_error') humanMsg = 'Authentication error. Please contact hello@nozomi.network.';
+      else if (res.status === 400) humanMsg = 'Something in the deck caused a bad request. Try re-exporting and uploading again.';
+      else humanMsg = 'API error ' + res.status + '. Check your key, wait 30 seconds, and try again.';
+      showError(humanMsg);
+      return;
+    }
+
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '';
+
+    // FIX #19: distinguish parse errors from network errors
+    let parsed;
+    try {
+      const clean = raw.replace(/```json|```/g, '').trim();
+      parsed = JSON.parse(clean);
+    } catch(parseErr) {
+      console.error('Claude response parse failed:', parseErr, 'Raw:', raw.slice(0, 200));
+      showError('The analysis returned an unexpected format. Try again — if it keeps happening, email <strong>hello@nozomi.network</strong> with your deck.');
+      return;
+    }
+
+    // FIX #14: validate we got all 8 categories before rendering
+    if (!parsed.categories || parsed.categories.length < 8) {
+      console.warn('Incomplete categories returned:', parsed.categories?.length);
+      showError('The analysis was incomplete — Claude may have timed out. Try again with a smaller deck, or email <strong>hello@nozomi.network</strong>.');
+      return;
+    }
+
+    renderResults(parsed);
+  } catch(e) {
+    console.error('Network or unexpected error:', e);
+    showError('Something went wrong. Try again or email <strong>hello@nozomi.network</strong> and we will review your deck manually within 24 hours.');
+  }
+}
+
+// ===== FEED =====
+const FEED_ITEMS = [
+  { score: 2.1, verdict: 'The tokenomics slide is a pie chart with no numbers on it.' },
+  { score: 4.8, verdict: 'Four slides of product screenshots and zero slides of why anyone needs this.' },
+  { score: 1.9, verdict: 'The ask slide says raising $5M with no FDV, no instrument, no use of funds.' },
+  { score: 6.2, verdict: 'Strong hook. GTM is a list of KPIs with no channel and no loop.' },
+  { score: 3.3, verdict: 'Slide 8 says "2M users" with no source, no date, no definition of user.' },
+  { score: 5.5, verdict: 'Team slide is three LinkedIn photos with job titles and zero wins.' },
+  { score: 2.7, verdict: 'The market size is $847B. The path to capturing any of it is not in the deck.' },
+  { score: 7.1, verdict: 'Solid deck. The ask is underbaked. Raises $3M but never says at what valuation.' },
+  { score: 1.4, verdict: 'There is no traction slide. There is a roadmap that starts with "Q1: traction."' },
+  { score: 4.1, verdict: 'Why Now slide says "DeFi is growing." Growing from what? Growing to what?' },
+  { score: 6.8, verdict: 'Real metrics, real team. Competitor slide dismisses Uniswap in one sentence.' },
+  { score: 3.0, verdict: 'Discord server has 12,000 members. Product has 0 users. Slide calls this traction.' },
+];
+
+
+// Manual paste fallback
+function toggleManualPaste() {
+  const zone = document.getElementById('manual-paste-zone');
+  if (!zone) return;
+  zone.style.display = zone.style.display === 'none' ? 'block' : 'none';
+}
+
+async function runManualAnalysis() {
+  const text = document.getElementById('manual-text').value.trim();
+  if (text.length < 100) { uploadLoading.textContent = 'Paste more content — at least a few slides worth of text.'; uploadLoading.style.color = 'var(--pink)'; setTimeout(() => { uploadLoading.textContent = ''; }, 3000); return; }
+  showProcessing(text);
+  await runAnalysis(text.slice(0, 30000), Math.ceil(text.length / 400), null);
+}
+
+function renderFeed() {
+  const track = document.getElementById('feed-track');
+  if (!track) return;
+  const doubled = [...FEED_ITEMS, ...FEED_ITEMS];
+  track.innerHTML = doubled.map(item => {
+    const cls = item.score >= 7 ? 'green' : item.score >= 4 ? 'amber' : 'red';
+    return `<div class="feed-card">
+      <div class="feed-card-score ${cls}">${item.score.toFixed(1)}</div>
+      <div class="feed-card-verdict">"${item.verdict}"</div>
+    </div>`;
+  }).join('');
+
+  // JS-driven scroll — immune to CSS animation conflicts
+  const PX_PER_SEC = 40; // px/s — adjust feel here
+  let x = 0;
+  let paused = false;
+  let halfWidth = 0;
+  let lastTime = null;
+
+  track.addEventListener('mouseenter', () => { paused = true; });
+  track.addEventListener('mouseleave', () => { paused = false; });
+
+  function tick(ts) {
+    if (!halfWidth) {
+      halfWidth = track.scrollWidth / 2;
+    }
+    if (!lastTime) lastTime = ts;
+    if (!paused) {
+      const delta = (ts - lastTime) / 1000;
+      x += PX_PER_SEC * delta;
+      if (x >= halfWidth) x -= halfWidth; // seamless loop
+      track.style.transform = `translateX(-${x}px)`;
+    }
+    lastTime = ts;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+renderFeed();
+
+// ===== RENDER RESULTS =====
+function renderResults(data) {
+  // Cancel all processing timers
+  if (window._procLoopTimer) { clearTimeout(window._procLoopTimer); window._procLoopTimer = null; }
+  _procStepTimers.forEach(t => clearTimeout(t));
+  _procStepTimers = [];
+
+  hide('processing');
+
+  // Compute score from categories — never trust Claude's overall_score directly
+  const catScores = (data.categories || []).map(c => parseFloat(c.score) || 1);
+  const avgScore = catScores.length ? catScores.reduce((a,b) => a+b, 0) / catScores.length : 1;
+  const claudeScore = parseFloat(data.overall_score) || avgScore;
+  // If Claude's score is wildly off from category average, use the average
+  const s = Math.min(10, Math.max(1, Math.abs(claudeScore - avgScore) > 2 ? avgScore : claudeScore));
+  currentScore = s;
+  currentVerdict = data.verdict || '';
+  window._lastCategories = data.categories;
+
+  const scoreEl = document.getElementById('big-score-num');
+  scoreEl.textContent = s.toFixed(1);
+  scoreEl.className = 'big-score ' + scoreClass(s);
+
+  document.getElementById('verdict-text').textContent = data.verdict || '';
+
+  const grid = document.getElementById('cards-grid');
+  grid.innerHTML = '';
+  data.categories.forEach((cat, i) => {
+    const cls = scoreClass(cat.score);
+    // FIX #17: consistent decimal display on cards
+    const scoreDisplay = Number.isInteger(cat.score) ? cat.score + '.0' : cat.score;
+    const card = document.createElement('div');
+    card.className = 'score-card';
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-score-big ${cls}">${scoreDisplay}</div>
+        <div class="card-num-label">${i + 1}/8</div>
+      </div>
+      <div class="card-title">${cat.name}</div>
+      <div class="card-sting">${cat.sting || '— no sting returned —'}</div>
+      ${cat.feedback ? `<div class="card-full">${cat.feedback}</div><div class="card-expand-hint">Read full diagnosis →</div>` : ''}`;
+    card.addEventListener('click', () => {
+      card.classList.toggle('expanded');
+      const hint = card.querySelector('.card-expand-hint');
+      if (hint) hint.textContent = card.classList.contains('expanded') ? 'Collapse ↑' : 'Read full diagnosis →';
+    });
+    grid.appendChild(card);
+  });
+
+  // CTA — LOCKED APPROVED COPY
+  const CTA_VARIANTS = {
+    low: [{ pivot: 'This deck needs surgery. Not editing.', h: 'YOUR ROUND NEVER STARTED.', body: 'The idea might be real. The fundraising package is not. Nozomi rebuilds decks like this from the ground up — narrative, positioning, the ask — so you can close your round.' }],
+    mid: [{ pivot: 'Six investors replied. Four took calls. Zero followed up. Now you know why.', h: 'THE DECK IS THE PROBLEM.', body: 'You have a story. You do not have a package. Nozomi turns decks like this into materials that get forwarded between partners without a follow-up call.' }],
+    high: [{ pivot: 'You are one bad slide away from a closed round.', h: 'YOUR DECK GETS MEETINGS. IT DOES NOT CLOSE THEM.', body: 'The difference between "sounds interesting" and a term sheet is usually one sentence on one slide. Nozomi finds it.' }],
+    top: [{ pivot: 'Strong deck. Wrong investors seeing it.', h: 'A STRONG DECK IS TABLE STAKES.', body: 'Most rounds at this stage die in the targeting. Nozomi builds the investor list, the warm intro strategy, the close sequence.' }],
+    wildcard: [{ pivot: 'You have been fundraising for 14 weeks.', h: 'THAT IS NOT BAD LUCK.', body: 'Founders who close rounds do not have better ideas. They have better materials and they sent them to the right people. Nozomi does both.' }]
+  };
+
+  const useWildcard = s >= 4 && Math.random() < 0.2;
+  const tier = useWildcard ? 'wildcard' : (s < 4 ? 'low' : s < 6 ? 'mid' : s < 8 ? 'high' : 'top');
+  const pick = CTA_VARIANTS[tier][0];
+  document.getElementById('cta-pivot').textContent = pick.pivot;
+  document.getElementById('cta-h').textContent = pick.h;
+  document.getElementById('cta-body').textContent = pick.body;
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('cta-block').style.display = 'block';
+
+  // FIX #10 + #18: scroll to score-hero after DOM settles
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      const block = document.getElementById('score-hero-block');
+      if (block) block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  });
+  // Show email capture 1.5s after results render
+  setTimeout(openEmailModal, 1500);
+}
+
+function scoreClass(s) { return s >= 7 ? 'green' : s >= 4 ? 'amber' : 'red'; }
+
+// FIX #13 + #20: tweet truncated cleanly at 240 chars, no raw \n in URL
+function postToX() {
+  const score = currentScore !== null ? currentScore.toFixed(1) : '?';
+  // Keep verdict short enough that full tweet fits in 280 chars
+  const maxVerdictLen = 160;
+  const shortVerdict = currentVerdict.length > maxVerdictLen
+    ? currentVerdict.slice(0, maxVerdictLen - 1) + '…'
+    : currentVerdict;
+  const lines = [
+    `Just got my Web3 deck roasted by @NozomiNetwork.`,
+    `Scored ${score}/10.`,
+    `"${shortVerdict}"`,
+    `Free. Instant. No investor will say this to your face:`,
+    `roastmydeck.nozomi.network`
+  ];
+  const text = lines.join('\n\n');
+  // Update OG image dynamically so X card shows score when link is shared
+  const ogImg = document.querySelector('meta[property="og:image"]');
+  const twitterImg = document.querySelector('meta[name="twitter:image"]');
+  const ogUrl = `/api/og?score=${encodeURIComponent(score)}&verdict=${encodeURIComponent(shortVerdict)}`;
+  if (ogImg) ogImg.setAttribute('content', 'https://roastmydeck.nozomi.network' + ogUrl);
+  if (twitterImg) twitterImg.setAttribute('content', 'https://roastmydeck.nozomi.network' + ogUrl);
+  window.open('https://x.com/intent/post?text=' + encodeURIComponent(text), '_blank');
+}
+
+function downloadFullReport() {
+  const score = currentScore !== null ? currentScore.toFixed(1) : '?';
+  const cats = window._lastCategories || [];
+  const scoreColor = currentScore >= 7 ? '#10b981' : currentScore >= 4 ? '#f59e0b' : '#ef4444';
+
+  const cardRows = cats.map(cat => {
+    const cc = cat.score >= 7 ? '#10b981' : cat.score >= 4 ? '#f59e0b' : '#ef4444';
+    const scoreDisplay = Number.isInteger(cat.score) ? cat.score + '.0' : cat.score;
+    return `<div style="border:1px solid #ddd;border-radius:4px;padding:24px;margin-bottom:16px;page-break-inside:avoid">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <span style="font-family:Impact,sans-serif;font-size:48px;line-height:1;color:${cc}">${scoreDisplay}</span>
+        <span style="font-size:11px;color:#999;letter-spacing:0.1em;text-transform:uppercase">${cat.name}</span>
+      </div>
+      <p style="font-family:Georgia,serif;font-style:italic;font-size:15px;color:#222;line-height:1.7;margin:0 0 12px">${cat.sting || ''}</p>
+      ${cat.feedback ? `<p style="font-size:13px;color:#555;line-height:1.8;margin:0;padding-top:12px;border-top:1px solid #eee">${cat.feedback}</p>` : ''}
+    </div>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Roast Report — ${score}/10 — Nozomi</title>
+<style>
+  body{font-family:'Helvetica Neue',Arial,sans-serif;max-width:760px;margin:40px auto;padding:0 20px;color:#111;font-size:14px;line-height:1.6}
+  @media print{body{margin:0;padding:20px}@page{margin:20mm}}
+</style></head><body>
+<div style="border-bottom:3px solid #C2185B;padding-bottom:20px;margin-bottom:32px">
+  <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#C2185B;margin-bottom:8px">Nozomi Network — Pitch Deck Roast</div>
+  <div style="font-family:Impact,sans-serif;font-size:80px;line-height:1;color:${scoreColor}">${score}</div>
+  <div style="font-size:18px;color:#999;margin-bottom:16px">/10</div>
+  <p style="font-family:Georgia,serif;font-style:italic;font-size:20px;color:#222;line-height:1.5;margin:0">${currentVerdict}</p>
+</div>
+${cardRows}
+
+<div style="margin-top:32px;padding:32px;background:#0a0a09;border-radius:4px;text-align:center">
+  <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#C2185B;margin-bottom:16px">What happens next</div>
+  <div style="font-family:Impact,sans-serif;font-size:32px;letter-spacing:0.05em;color:white;margin-bottom:14px">NOZOMI FIXES DECKS LIKE THIS.</div>
+  <p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.8;max-width:480px;margin:0 auto 24px">Narrative, positioning, the ask. We rebuild Web3 fundraising packages that get forwarded between partners without a follow-up call.</p>
+  <a href="https://forms.fillout.com/t/kdCiuV5y3Dus" style="display:inline-block;background:#C2185B;color:white;text-decoration:none;padding:14px 36px;border-radius:3px;font-family:monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase">Fix the deck with Nozomi →</a>
+  <div style="margin-top:16px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:0.05em">roastmydeck.nozomi.network — Free. Instant. No investor will say this to your face.</div>
+</div>
+
+<!-- EMAIL CAPTURE MODAL -->
+<div id="email-modal" role="dialog" aria-modal="true">
+  <div class="email-modal-box">
+    <button class="email-modal-close" onclick="closeEmailModal()" aria-label="Close">&times;</button>
+    <div id="email-modal-form">
+      <span class="email-modal-tag">Your results are ready</span>
+      <h3 class="email-modal-h">GET THE FULL BREAKDOWN.</h3>
+      <p class="email-modal-sub">Drop your email and we will send you the full roast report — plus the one fix most founders miss at your score level.</p>
+      <div class="email-modal-row">
+        <input type="email" id="email-input-modal" placeholder="your@email.com" autocomplete="email">
+        <button class="email-modal-btn" onclick="submitEmail()">Send it</button>
+      </div>
+      <button class="email-modal-skip" onclick="closeEmailModal()">Skip — just show me the results</button>
+    </div>
+    <div class="email-modal-success" id="email-modal-success">
+      <div class="email-modal-success-h">GOT IT.</div>
+      <div class="email-modal-success-sub">Report on the way. Check your inbox in the next few minutes.</div>
+    </div>
+  </div>
+</div>
+
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `nozomi-roast-${score.replace('.','_')}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// FIX #2: heroVisible reset properly in reset()
+
+// ===== EMAIL MODAL + AIRTABLE =====
+// Replace AIRTABLE_BASE_ID and AIRTABLE_TABLE_NAME in your serverless function
+// The frontend never holds the Airtable key — all writes go through /api/email
+function openEmailModal() {
+  const modal = document.getElementById('email-modal');
+  if (modal) modal.classList.add('open');
+  const inp = document.getElementById('email-input-modal');
+  if (inp) setTimeout(() => inp.focus(), 100);
+}
+function closeEmailModal() {
+  const modal = document.getElementById('email-modal');
+  if (modal) modal.classList.remove('open');
+}
+async function submitEmail() {
+  const inp = document.getElementById('email-input-modal');
+  const email = inp ? inp.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    if (inp) { inp.style.borderColor = '#ef4444'; setTimeout(() => inp.style.borderColor = '', 1200); }
+    return;
+  }
+  const btn = document.querySelector('.email-modal-btn');
+  if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+  try {
+    await fetch('/api/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        score: currentScore,
+        verdict: currentVerdict,
+        timestamp: new Date().toISOString()
+      })
+    });
+  } catch(e) { /* silent — never block the user on email failure */ }
+  document.getElementById('email-modal-form').style.display = 'none';
+  document.getElementById('email-modal-success').style.display = 'block';
+  setTimeout(() => closeEmailModal(), 2400);
+}
+// Close modal on backdrop click
+document.addEventListener('click', function(e) {
+  const modal = document.getElementById('email-modal');
+  if (modal && modal.classList.contains('open') && e.target === modal) closeEmailModal();
+});
+// Close modal on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeEmailModal();
+});
+
+function reset() {
+  closeEmailModal();
+  // Reset email modal form state for next upload
+  const emf = document.getElementById('email-modal-form');
+  const ems = document.getElementById('email-modal-success');
+  const emb = document.querySelector('.email-modal-btn');
+  if (emf) emf.style.display = '';
+  if (ems) ems.style.display = 'none';
+  if (emb) { emb.textContent = 'Send it'; emb.disabled = false; }
+  const einp = document.getElementById('email-input-modal');
+  if (einp) einp.value = '';
+  hideError();
+  hide('results');
+  hideCTA();
+  hide('processing');
+  // Cancel all timers
+  if (window._procLoopTimer) { clearTimeout(window._procLoopTimer); window._procLoopTimer = null; }
+  _procStepTimers.forEach(t => clearTimeout(t));
+  _procStepTimers = [];
+  document.getElementById('hero').style.display = 'flex';
+  currentScore = null;
+  currentVerdict = '';
+  uploadHeadline.textContent = 'DROP YOUR DECK';
+  uploadLoading.textContent = '';
+  document.getElementById('file-input').value = '';
+}
+
+function hide(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+function hideCTA() { document.getElementById('cta-block').style.display = 'none'; }
+function hideError() { document.getElementById('error-inner').style.display = 'none'; }
+function showError(msg) {
+  // Cancel timers so processing animation stops
+  if (window._procLoopTimer) { clearTimeout(window._procLoopTimer); window._procLoopTimer = null; }
+  _procStepTimers.forEach(t => clearTimeout(t));
+  _procStepTimers = [];
+  hide('processing'); hide('results'); hideCTA();
+  const el = document.getElementById('error-inner');
+  el.style.display = 'flex';
+  const body = document.getElementById('error-body');
+  if (body) body.innerHTML = msg;
+}
+</script>
+
+<!-- EMAIL CAPTURE MODAL -->
+<div id="email-modal" role="dialog" aria-modal="true">
+  <div class="email-modal-box">
+    <button class="email-modal-close" onclick="closeEmailModal()" aria-label="Close">&times;</button>
+    <div id="email-modal-form">
+      <span class="email-modal-tag">Your results are ready</span>
+      <h3 class="email-modal-h">GET THE FULL BREAKDOWN.</h3>
+      <p class="email-modal-sub">Drop your email and we will send you the full roast report — plus the one fix most founders miss at your score level.</p>
+      <div class="email-modal-row">
+        <input type="email" id="email-input-modal" placeholder="your@email.com" autocomplete="email">
+        <button class="email-modal-btn" onclick="submitEmail()">Send it</button>
+      </div>
+      <button class="email-modal-skip" onclick="closeEmailModal()">Skip — just show me the results</button>
+    </div>
+    <div class="email-modal-success" id="email-modal-success">
+      <div class="email-modal-success-h">GOT IT.</div>
+      <div class="email-modal-success-sub">Report on the way. Check your inbox in the next few minutes.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

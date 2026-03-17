@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/roast", "destination": "/api/roast.js" },
+    { "source": "/api/email", "destination": "/api/email.js" }
+  ]
+}
