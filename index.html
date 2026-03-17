@@ -1411,6 +1411,17 @@ function postToX() {
 }
 
 function downloadFullReport() {
+  // Show email modal before download if email not already captured
+  const emailCaptured = sessionStorage.getItem('nozomi_email_captured');
+  if (!emailCaptured) {
+    window._pendingDownload = true;
+    openEmailModal();
+    return;
+  }
+  _doDownload();
+}
+
+function _doDownload() {
   const score = currentScore !== null ? currentScore.toFixed(1) : '?';
   const cats = window._lastCategories || [];
   const scoreColor = currentScore >= 7 ? '#10b981' : currentScore >= 4 ? '#f59e0b' : '#ef4444';
@@ -1498,6 +1509,7 @@ function openEmailModal() {
 function closeEmailModal() {
   const modal = document.getElementById('email-modal');
   if (modal) modal.classList.remove('open');
+  if (window._pendingDownload) { window._pendingDownload = false; _doDownload(); }
 }
 async function submitEmail() {
   const inp = document.getElementById('email-input-modal');
@@ -1520,9 +1532,13 @@ async function submitEmail() {
       })
     });
   } catch(e) { /* silent — never block the user on email failure */ }
+  sessionStorage.setItem('nozomi_email_captured', '1');
   document.getElementById('email-modal-form').style.display = 'none';
   document.getElementById('email-modal-success').style.display = 'block';
-  setTimeout(() => closeEmailModal(), 2400);
+  setTimeout(() => {
+    closeEmailModal();
+    if (window._pendingDownload) { window._pendingDownload = false; _doDownload(); }
+  }, 2400);
 }
 // Close modal on backdrop click
 document.addEventListener('click', function(e) {
