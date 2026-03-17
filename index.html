@@ -635,6 +635,26 @@ header {
 }
 .email-modal-success-sub { font-size: 12px; color: rgba(242,237,227,0.4); line-height: 1.6; }
 
+/* ===== ROAST CARD ===== */
+.card-section { padding: 60px 0; border-bottom: 1px solid rgba(242,237,227,0.07); text-align: center; }
+.card-section-label { font-family: var(--display); font-size: clamp(18px,1.8vw,24px); letter-spacing: 0.05em; color: var(--pink); text-transform: uppercase; margin-bottom: 8px; }
+.card-section-sub { font-size: 12px; color: rgba(242,237,227,0.35); margin-bottom: 28px; }
+.card-canvas-wrap { display: inline-block; position: relative; border-radius: 6px; overflow: hidden; box-shadow: 0 12px 48px rgba(0,0,0,0.5); }
+.card-canvas-wrap canvas { display: block; max-width: 100%; height: auto; }
+.card-actions { display: flex; gap: 12px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+.card-action-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(242,237,227,0.06); border: 1px solid rgba(242,237,227,0.15);
+  color: var(--off-white); padding: 13px 28px; border-radius: 3px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.card-action-btn:hover { background: var(--pink); border-color: var(--pink); transform: translateY(-1px); }
+.card-action-btn.secondary { background: rgba(242,237,227,0.04); }
+.card-action-btn.secondary:hover { background: rgba(242,237,227,0.1); border-color: var(--off-white); }
+.card-copied { font-size: 11px; color: var(--green-score); margin-top: 8px; opacity: 0; transition: opacity 0.3s; }
+.card-copied.show { opacity: 1; }
+
 /* ===== PRINT ===== */
 @media print {
   body { background: white !important; color: #111 !important; }
@@ -767,6 +787,21 @@ header {
     </div>
   </div>
 </section>
+
+<!-- ROAST CARD -->
+<div class="card-section" id="card-section" style="display:none;">
+  <div class="card-section-label">YOUR ROAST CARD</div>
+  <div class="card-section-sub">Download it. Post it. Send it to your co-founder.</div>
+  <div class="card-canvas-wrap" id="card-canvas-wrap">
+    <canvas id="roast-card-canvas" width="900" height="1200"></canvas>
+  </div>
+  <div class="card-actions">
+    <button class="card-action-btn" onclick="downloadCard()">↓ Download Card</button>
+    <button class="card-action-btn secondary" onclick="copyCard()">⎘ Copy Image</button>
+    <button class="card-action-btn" onclick="postCardToX()"><span style="font-weight:700">𝕏</span> Post to X</button>
+  </div>
+  <div class="card-copied" id="card-copied">Copied to clipboard</div>
+</div>
 
 <!-- CTA -->
 <div class="cta-section" id="cta-block">
@@ -1372,6 +1407,12 @@ function renderResults(data) {
   document.getElementById('results').style.display = 'block';
   document.getElementById('cta-block').style.display = 'block';
 
+  // Generate roast card
+  const archetype = classifyArchetype(data.categories, s);
+  window._lastArchetype = archetype;
+  // Delay slightly to ensure fonts are painted
+  setTimeout(() => drawRoastCard(s, data.verdict || '', archetype, data.categories), 200);
+
   // FIX #10 + #18: scroll to score-hero after DOM settles
   requestAnimationFrame(() => {
     setTimeout(() => {
@@ -1495,6 +1536,263 @@ ${cardRows}
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+// ===== ROAST CARD =====
+const ROAST_ARCHETYPES = {
+  1: "THE SOLUTION WITHOUT A PROBLEM",
+  2: "THE UNDIFFERENTIATED BUILDER",
+  3: "THE TAM FANTASIST",
+  4: "THE DISCORD-IS-TRACTION FOUNDER",
+  5: "THE TOKENLESS WONDER",
+  6: "THE VIBES-ONLY STRATEGIST",
+  7: "THE TITLE-INFLATION EXPERT",
+  8: "THE JUST-TRUST-ME RAISER"
+};
+const HIGH_ARCHETYPES = {
+  1: "THE HOOK THAT LANDS",
+  2: "THE MOAT DIGGER",
+  3: "THE MARKET REALIST",
+  4: "THE RECEIPTS CARRIER",
+  5: "THE TOKEN ARCHITECT",
+  6: "THE CHANNEL OWNER",
+  7: "THE BEEN-THERE TEAM",
+  8: "THE CLEAN ASK"
+};
+
+function classifyArchetype(categories, overallScore) {
+  if (overallScore >= 8) return "THE ALMOST-FUNDABLE ONE";
+  let lowest = categories[0];
+  categories.forEach(c => { if (c.score < lowest.score) lowest = c; });
+  return ROAST_ARCHETYPES[lowest.id] || "THE PITCH DECK OWNER";
+}
+
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (const word of words) {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function drawRoastCard(score, verdict, archetype, categories) {
+  const canvas = document.getElementById('roast-card-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 900, H = 1200;
+
+  // Background
+  ctx.fillStyle = '#0a0a09';
+  ctx.fillRect(0, 0, W, H);
+
+  // Noise texture
+  const imgData = ctx.getImageData(0, 0, W, H);
+  for (let i = 0; i < imgData.data.length; i += 4) {
+    const n = (Math.random() - 0.5) * 12;
+    imgData.data[i] += n;
+    imgData.data[i+1] += n;
+    imgData.data[i+2] += n;
+  }
+  ctx.putImageData(imgData, 0, 0);
+
+  // Corner brackets
+  ctx.strokeStyle = 'rgba(242,237,227,0.12)';
+  ctx.lineWidth = 2;
+  const m = 40, bl = 60;
+  // top-left
+  ctx.beginPath(); ctx.moveTo(m, m+bl); ctx.lineTo(m, m); ctx.lineTo(m+bl, m); ctx.stroke();
+  // top-right
+  ctx.beginPath(); ctx.moveTo(W-m-bl, m); ctx.lineTo(W-m, m); ctx.lineTo(W-m, m+bl); ctx.stroke();
+  // bottom-left
+  ctx.beginPath(); ctx.moveTo(m, H-m-bl); ctx.lineTo(m, H-m); ctx.lineTo(m+bl, H-m); ctx.stroke();
+  // bottom-right
+  ctx.beginPath(); ctx.moveTo(W-m-bl, H-m); ctx.lineTo(W-m, H-m); ctx.lineTo(W-m, H-m-bl); ctx.stroke();
+
+  const pad = 80;
+
+  // Nozomi logo
+  ctx.font = '500 13px "DM Mono", monospace';
+  ctx.letterSpacing = '4px';
+  ctx.fillStyle = '#C2185B';
+  ctx.fillText('NOZOMI', pad, 100);
+  ctx.fillStyle = 'rgba(242,237,227,0.35)';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('NETWORK', pad + ctx.measureText('NOZOMI').width + 14, 100);
+  ctx.letterSpacing = '0px';
+
+  // "PITCH DECK ROAST" label
+  ctx.font = '12px "DM Mono", monospace';
+  ctx.fillStyle = 'rgba(242,237,227,0.2)';
+  ctx.letterSpacing = '3px';
+  ctx.fillText('PITCH DECK ROAST', pad, 126);
+  ctx.letterSpacing = '0px';
+
+  // Divider
+  ctx.strokeStyle = 'rgba(242,237,227,0.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad, 150); ctx.lineTo(W - pad, 150); ctx.stroke();
+
+  // Score section label
+  ctx.font = '11px "DM Mono", monospace';
+  ctx.fillStyle = 'rgba(242,237,227,0.25)';
+  ctx.letterSpacing = '3px';
+  ctx.fillText('ROAST SCORE', pad, 200);
+  ctx.letterSpacing = '0px';
+
+  // Big score with glow
+  const scoreColor = score >= 7 ? '#10b981' : score >= 4 ? '#f59e0b' : '#ef4444';
+  const scoreStr = score.toFixed(1);
+  ctx.save();
+  ctx.font = '220px "Bebas Neue", Impact, sans-serif';
+  ctx.textAlign = 'center';
+  // Glow layers
+  ctx.shadowColor = scoreColor;
+  ctx.shadowBlur = 80;
+  ctx.fillStyle = scoreColor;
+  ctx.fillText(scoreStr, W/2, 420);
+  ctx.shadowBlur = 40;
+  ctx.fillText(scoreStr, W/2, 420);
+  ctx.shadowBlur = 0;
+  ctx.fillText(scoreStr, W/2, 420);
+  // /10
+  ctx.font = '32px "DM Mono", monospace';
+  ctx.fillStyle = 'rgba(242,237,227,0.25)';
+  ctx.fillText('/10', W/2, 460);
+  ctx.restore();
+
+  // Divider
+  ctx.strokeStyle = 'rgba(194,24,91,0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad, 490); ctx.lineTo(W - pad, 490); ctx.stroke();
+
+  // Archetype label
+  ctx.font = '11px "DM Mono", monospace';
+  ctx.fillStyle = 'rgba(242,237,227,0.25)';
+  ctx.letterSpacing = '3px';
+  ctx.textAlign = 'left';
+  ctx.fillText('ARCHETYPE', pad, 530);
+  ctx.letterSpacing = '0px';
+
+  // Archetype name
+  ctx.font = '52px "Bebas Neue", Impact, sans-serif';
+  ctx.fillStyle = '#f2ede3';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '3px';
+  ctx.fillText(archetype, W/2, 590);
+  ctx.letterSpacing = '0px';
+
+  // Divider
+  ctx.strokeStyle = 'rgba(242,237,227,0.08)';
+  ctx.beginPath(); ctx.moveTo(pad, 620); ctx.lineTo(W - pad, 620); ctx.stroke();
+
+  // Verdict label
+  ctx.font = '11px "DM Mono", monospace';
+  ctx.fillStyle = 'rgba(242,237,227,0.25)';
+  ctx.letterSpacing = '3px';
+  ctx.textAlign = 'left';
+  ctx.fillText('VERDICT', pad, 660);
+  ctx.letterSpacing = '0px';
+
+  // Verdict text
+  ctx.font = 'italic 22px "DM Serif Display", Georgia, serif';
+  ctx.fillStyle = 'rgba(242,237,227,0.65)';
+  ctx.textAlign = 'left';
+  const verdictLines = wrapText(ctx, verdict, W - pad * 2);
+  verdictLines.slice(0, 5).forEach((line, i) => {
+    ctx.fillText(line, pad, 700 + i * 34);
+  });
+
+  const verdictBottom = 700 + Math.min(verdictLines.length, 5) * 34 + 20;
+
+  // Divider
+  ctx.strokeStyle = 'rgba(242,237,227,0.08)';
+  ctx.beginPath(); ctx.moveTo(pad, verdictBottom); ctx.lineTo(W - pad, verdictBottom); ctx.stroke();
+
+  // Category mini scores
+  const catY = verdictBottom + 30;
+  ctx.font = '11px "DM Mono", monospace';
+  ctx.letterSpacing = '1px';
+  const catNames = ['Hook', 'Solution', 'Market', 'Traction', 'Token', 'GTM', 'Team', 'Ask'];
+  const colW = (W - pad * 2) / 4;
+  categories.forEach((cat, i) => {
+    const col = i % 4;
+    const row = Math.floor(i / 4);
+    const x = pad + col * colW;
+    const y = catY + row * 36;
+    const cc = cat.score >= 7 ? '#10b981' : cat.score >= 4 ? '#f59e0b' : '#ef4444';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(242,237,227,0.3)';
+    ctx.fillText(catNames[i], x, y);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = cc;
+    ctx.font = '500 14px "DM Mono", monospace';
+    ctx.fillText(cat.score.toFixed(1), x + colW - 20, y);
+    ctx.font = '11px "DM Mono", monospace';
+  });
+  ctx.letterSpacing = '0px';
+
+  // Bottom watermark
+  ctx.textAlign = 'center';
+  ctx.font = '12px "DM Mono", monospace';
+  ctx.fillStyle = 'rgba(242,237,227,0.15)';
+  ctx.letterSpacing = '2px';
+  ctx.fillText('roastmydeck.nozomi.network', W/2, H - 80);
+  ctx.letterSpacing = '0px';
+  ctx.font = 'italic 13px "DM Serif Display", Georgia, serif';
+  ctx.fillStyle = 'rgba(242,237,227,0.1)';
+  ctx.fillText('Free. Instant. No investor will say this to your face.', W/2, H - 56);
+
+  document.getElementById('card-section').style.display = 'block';
+}
+
+function downloadCard() {
+  const canvas = document.getElementById('roast-card-canvas');
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'nozomi-roast-card.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
+}
+
+async function copyCard() {
+  const canvas = document.getElementById('roast-card-canvas');
+  try {
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+    const el = document.getElementById('card-copied');
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2000);
+  } catch(e) {
+    // Fallback: download instead
+    downloadCard();
+  }
+}
+
+function postCardToX() {
+  const score = currentScore !== null ? currentScore.toFixed(1) : '?';
+  const arch = window._lastArchetype || '';
+  const maxLen = 120;
+  const shortVerdict = currentVerdict.length > maxLen ? currentVerdict.slice(0, maxLen - 1) + '…' : currentVerdict;
+  const text = [
+    `Just got my Web3 deck roasted by @NozomiNetwork.`,
+    `${score}/10 — ${arch}`,
+    `"${shortVerdict}"`,
+    `roastmydeck.nozomi.network`
+  ].join('\n\n');
+  window.open('https://x.com/intent/post?text=' + encodeURIComponent(text), '_blank');
+}
+
 // FIX #2: heroVisible reset properly in reset()
 
 // ===== EMAIL MODAL + AIRTABLE =====
@@ -1565,6 +1863,7 @@ function reset() {
   hide('results');
   hideCTA();
   hide('processing');
+  document.getElementById('card-section').style.display = 'none';
   // Cancel all timers
   if (window._procLoopTimer) { clearTimeout(window._procLoopTimer); window._procLoopTimer = null; }
   _procStepTimers.forEach(t => clearTimeout(t));
